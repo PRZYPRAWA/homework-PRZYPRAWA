@@ -1,5 +1,5 @@
 from typing import List
-
+import datetime
 import pandas as pd
 
 CONFIRMED_CASES_URL = f"https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data" \
@@ -29,7 +29,8 @@ def poland_cases_by_date(day: int, month: int, year: int = 2020) -> int:
     """
     
     # Your code goes here (remove pass)
-    pass
+    y = year % 100
+    return confirmed_cases.loc[confirmed_cases["Country/Region"]=="Poland"][f'{month}/{day}/{y}'].values[0]
 
 
 def top5_countries_by_date(day: int, month: int, year: int = 2020) -> List[str]:
@@ -49,7 +50,10 @@ def top5_countries_by_date(day: int, month: int, year: int = 2020) -> List[str]:
     """
 
     # Your code goes here (remove pass)
-    pass
+    y = year % 100
+    data=f'{month}/{day}/{y}'
+    top = confirmed_cases.groupby(["Country/Region"]).max().sort_values(by=data).tail(5).iloc[:,0].keys().tolist()[::-1]
+    return top
 
 
 def no_new_cases_count(day: int, month: int, year: int = 2020) -> int:
@@ -69,4 +73,10 @@ def no_new_cases_count(day: int, month: int, year: int = 2020) -> int:
     """
     
     # Your code goes here (remove pass)
-    pass
+    date_now = datetime.date(year, month, day)
+    date_prev = date_now - datetime.timedelta(days=1)
+    pattern = '%#m/%#d/%y'
+    
+    num_of_countries = confirmed_cases.count()['Country/Region']
+    num__with_new_cases = confirmed_cases[confirmed_cases[date_now.strftime(pattern)] == confirmed_cases[date_prev.strftime(pattern)]].count()['Country/Region']
+    return num_of_countries - num__with_new_cases
