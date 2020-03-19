@@ -29,6 +29,7 @@ def poland_cases_by_date(day: int, month: int, year: int = 2020) -> int:
     """
     
     # Your code goes here (remove pass)
+    
     y = year % 100
     return confirmed_cases.loc[confirmed_cases["Country/Region"]=="Poland"][f'{month}/{day}/{y}'].values[0]
 
