@@ -1,6 +1,7 @@
 from typing import List
 import pandas as pd
 import datetime
+import numpy as np
 import os
 
 # confirmed cases
@@ -39,9 +40,8 @@ def countries_with_no_deaths_count(date: datetime.date) -> int:
     :param date: Date object of the date to get the results for
     :return: Number of countries with no deaths but with active cases on a given date as an integer
     """
-    
-    # Your code goes here
-    pass
+    date = format_date(date)
+    return np.count_nonzero(np.logical_and(dfC[date] > 0, dfD[date] == 0))
 
 
 def more_cured_than_deaths_indices(date: datetime.date) -> List[int]:
@@ -64,6 +64,5 @@ def more_cured_than_deaths_indices(date: datetime.date) -> List[int]:
     :param date: Date object of the date to get the results for
     :return: A List of integers containing indices of countries which had more cured cases than deaths on a given date
     """
-    
-    # Your code goes here
-    pass
+    date = format_date(date)
+    return dfR[dfR[date] > dfD[date]].index.values.tolist()
